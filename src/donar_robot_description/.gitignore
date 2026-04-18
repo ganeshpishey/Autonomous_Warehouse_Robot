@@ -1,0 +1,43 @@
+# ROS2 Build Artifacts
+build/
+install/
+log/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Backup files
+*.backup
+*.bak
+*~
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Gazebo
+.gazebo/
+
+# ROS
+*.cfg
+
+# Build directories (if in workspace root)
+/build/
+/install/
+/log/

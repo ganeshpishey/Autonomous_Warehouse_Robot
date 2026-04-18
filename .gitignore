@@ -1,3 +1,4 @@
+# ROS 2 build files
 build/
 install/
 log/
@@ -5,3 +6,12 @@ log/
 __pycache__/
 .vscode/
 
+# Python cache
+__pycache__/
+*.pyc
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store

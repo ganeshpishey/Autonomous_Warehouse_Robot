@@ -1,0 +1,291 @@
+<?xml version="1.0" ?>
+<robot name="donar_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:arg name="robot_name" default="donar_robot"/>
+  <xacro:arg name="frame_prefix" default=""/>
+  <xacro:property name="robot_name" value="$(arg robot_name)"/>
+  <xacro:property name="frame_prefix" value="$(arg frame_prefix)"/>
+
+<xacro:include filename="$(find donar_robot_description)/urdf/materials.xacro"/>
+
+
+<!-- BASE FOOTPRINT -->
+<link name="${frame_prefix}base_footprint"/>
+
+<joint name="${frame_prefix}base_footprint_joint" type="fixed">
+  <origin xyz="0 0 0.15" rpy="0 0 0"/>
+  <parent link="${frame_prefix}base_footprint"/>
+  <child link="${frame_prefix}base_link"/>
+</joint>
+
+<!-- BASE LINK -->
+<link name="${frame_prefix}base_link">
+  <inertial>
+    <origin xyz="0.00019643943716737475 2.2407483791136845e-05 0.2893670205310124" rpy="0 0 0"/>
+    <mass value="118.125"/>
+    <inertia ixx="34.36262240625" iyy="58.34578078125" izz="63.99484734375" ixy="-0.000334125" iyz="0.00184528125" ixz="-0.0682374375"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://donar_robot_description/meshes/base_link.stl" scale="0.0015 0.0015 0.0015"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <visual>
+    <origin xyz="0 0 0.66" rpy="0 0 0"/>
+    <geometry>
+      <box size="0.48 0.3 0.12"/>
+    </geometry>
+    <material name="visibility_orange">
+      <color rgba="1.0 0.35 0.0 1.0"/>
+    </material>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0.18" rpy="0 0 0"/>
+    <geometry>
+      <box size="0.99 0.69 0.3"/>
+    </geometry>
+  </collision>
+</link>
+
+<!-- LIDAR -->
+<link name="${frame_prefix}lidar_link">
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="0.84375"/>
+    <inertia ixx="0.003796875" iyy="0.003796875" izz="0.003796875" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <cylinder radius="0.0675" length="0.09"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <cylinder radius="0.0675" length="0.09"/>
+    </geometry>
+  </collision>
+</link>
+
+<joint name="${frame_prefix}lidar_joint" type="fixed">
+  <origin xyz="0.36 0 0.645" rpy="0 0 0"/>
+  <parent link="${frame_prefix}base_link"/>
+  <child link="${frame_prefix}lidar_link"/>
+</joint>
+
+<!-- RIGHT WHEEL -->
+<link name="${frame_prefix}right_wheel_1">
+  <inertial>
+    <origin xyz="0.0 -0.0375 0.0" rpy="0 0 0"/>
+    <mass value="6.75"/>
+    <inertia ixx="0.12360346875" iyy="0.2371831875" izz="0.12360346875" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.3315 0.39 -0.06" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://donar_robot_description/meshes/right_wheel_1.stl" scale="0.0015 0.0015 0.0015"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="0 -0.0375 0" rpy="1.57079632679 0 0"/>
+    <geometry>
+      <cylinder radius="0.21" length="0.075"/>
+    </geometry>
+  </collision>
+</link>
+
+<gazebo reference="${frame_prefix}right_wheel_1">
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
+  <kp>1000000.0</kp>
+  <kd>100.0</kd>
+</gazebo>
+
+<joint name="${frame_prefix}right_wheel_joint" type="continuous">
+  <origin xyz="0.3315 -0.39 0.06" rpy="0 0 0"/>
+  <parent link="${frame_prefix}base_link"/>
+  <child link="${frame_prefix}right_wheel_1"/>
+  <axis xyz="0.0 1.0 0.0"/>
+</joint>
+
+<!-- LEFT WHEEL -->
+<link name="${frame_prefix}left_wheel_1">
+  <inertial>
+    <origin xyz="0.0 0.0375 0.0" rpy="0 0 0"/>
+    <mass value="6.75"/>
+    <inertia ixx="0.12360346875" iyy="0.2371831875" izz="0.12360346875" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.3315 -0.39 -0.06" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://donar_robot_description/meshes/left_wheel_1.stl" scale="0.0015 0.0015 0.0015"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0.0375 0" rpy="1.57079632679 0 0"/>
+    <geometry>
+      <cylinder radius="0.21" length="0.075"/>
+    </geometry>
+  </collision>
+</link>
+
+<gazebo reference="${frame_prefix}left_wheel_1">
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
+  <kp>1000000.0</kp>
+  <kd>100.0</kd>
+</gazebo>
+
+<joint name="${frame_prefix}left_wheel_joint" type="continuous">
+  <origin xyz="0.3315 0.39 0.06" rpy="0 0 0"/>
+  <parent link="${frame_prefix}base_link"/>
+  <child link="${frame_prefix}left_wheel_1"/>
+  <axis xyz="0.0 1.0 0.0"/>
+</joint>
+
+<!-- LEFT CASTER WHEEL -->
+<link name="${frame_prefix}left_caster_wheel_1">
+  <inertial>
+    <origin xyz="0 0 -0.05836956521739113" rpy="0 0 0"/>
+    <mass value="1.3786565201013452"/>
+    <inertia ixx="0.00280209375" iyy="0.00280209375" izz="0.0023085" ixy="0" iyz="0" ixz="0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 -0.015" rpy="0 0 0"/>
+    <geometry>
+      <sphere radius="0.12"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 -0.075" rpy="0 0 0"/>
+    <geometry>
+      <sphere radius="0.06"/>
+    </geometry>
+  </collision>
+</link>
+
+<!-- LEFT CASTER JOINT -->
+<joint name="${frame_prefix}left_caster_joint" type="fixed">
+  <origin xyz="-0.456 0.3 -0.015" rpy="0 0 0"/>
+  <parent link="${frame_prefix}base_link"/>
+  <child link="${frame_prefix}left_caster_wheel_1"/>
+</joint>
+<!-- Add Gazebo friction properties -->
+<gazebo reference="${frame_prefix}left_caster_wheel_1">
+  <mu1>0.0</mu1>
+  <mu2>0.0</mu2>
+  <kp>1000000.0</kp>
+  <kd>100.0</kd>
+</gazebo>
+
+<!-- RIGHT CASTER WHEEL -->
+<link name="${frame_prefix}right_caster_wheel_1">
+  <inertial>
+    <origin xyz="0 0 -0.05836956521739113" rpy="0 0 0"/>
+    <mass value="1.3786565201013452"/>
+    <inertia ixx="0.00280209375" iyy="0.00280209375" izz="0.0023085" ixy="0" iyz="0" ixz="0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 -0.015" rpy="0 0 0"/>
+    <geometry>
+      <sphere radius="0.12"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 -0.075" rpy="0 0 0"/>
+    <geometry>
+      <sphere radius="0.06"/>
+    </geometry>
+  </collision>
+</link>
+
+
+
+<!-- RIGHT CASTER JOINT -->
+<joint name="${frame_prefix}right_caster_joint" type="fixed">
+  <origin xyz="-0.456 -0.3 -0.015" rpy="0 0 0"/>
+  <parent link="${frame_prefix}base_link"/>
+  <child link="${frame_prefix}right_caster_wheel_1"/>
+</joint>
+
+<gazebo reference="${frame_prefix}right_caster_wheel_1">
+  <mu1>0.0</mu1>
+  <mu2>0.0</mu2>
+  <kp>1000000.0</kp>
+  <kd>100.0</kd>
+</gazebo>
+
+<gazebo reference="${frame_prefix}lidar_link">
+  <!-- 3D GPU lidar for visible rays in Gazebo and a bridged point cloud topic
+       that can be converted to /scan for SLAM. -->
+  <sensor type="gpu_lidar" name="front_lidar">
+    <pose>0 0 0 0 0 0</pose>
+    <topic>/${robot_name}/lidar</topic>
+    <always_on>true</always_on>
+    <update_rate>10</update_rate>
+    <visualize>true</visualize>
+    <lidar>
+      <scan>
+        <horizontal>
+          <samples>1024</samples>
+          <resolution>1</resolution>
+          <min_angle>-3.14159</min_angle>
+          <max_angle>3.14159</max_angle>
+        </horizontal>
+        <vertical>
+          <samples>16</samples>
+          <resolution>1</resolution>
+          <min_angle>-0.261799</min_angle>
+          <max_angle>0.261799</max_angle>
+        </vertical>
+      </scan>
+      <range>
+        <min>0.12</min>
+        <max>10.0</max>
+        <resolution>0.01</resolution>
+      </range>
+      <noise>
+        <type>gaussian</type>
+        <mean>0.0</mean>
+        <stddev>0.01</stddev>
+      </noise>
+    </lidar>
+  </sensor>
+</gazebo>
+
+<gazebo>
+  <plugin
+    filename="libignition-gazebo6-diff-drive-system.so"
+    name="ignition::gazebo::systems::DiffDrive">
+
+    <left_joint>${frame_prefix}left_wheel_joint</left_joint>
+    <right_joint>${frame_prefix}right_wheel_joint</right_joint>
+
+    <wheel_separation>0.78</wheel_separation>
+    <wheel_radius>0.21</wheel_radius>
+    <max_linear_acceleration>3.0</max_linear_acceleration>
+    <min_linear_acceleration>-3.0</min_linear_acceleration>
+    <max_angular_acceleration>12.0</max_angular_acceleration>
+    <min_angular_acceleration>-12.0</min_angular_acceleration>
+    <max_linear_velocity>2.0</max_linear_velocity>
+    <min_linear_velocity>-2.0</min_linear_velocity>
+    <max_angular_velocity>6.0</max_angular_velocity>
+    <min_angular_velocity>-6.0</min_angular_velocity>
+
+    <topic>/${robot_name}/cmd_vel</topic>
+    <odom_topic>/${robot_name}/odometry</odom_topic>
+    <tf_topic>/tf</tf_topic>
+    <frame_id>${frame_prefix}odom</frame_id>
+    <child_frame_id>${frame_prefix}base_footprint</child_frame_id>
+    <odom_publish_frequency>10</odom_publish_frequency>
+
+  </plugin>
+</gazebo>
+</robot>
