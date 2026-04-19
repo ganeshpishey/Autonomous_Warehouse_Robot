@@ -150,12 +150,30 @@ def generate_launch_description():
             output="screen",
         )
 
+        lidar_sensor_frame_tf = Node(
+            package="tf2_ros",
+            executable="static_transform_publisher",
+            name=f"{robot_name_val}_front_lidar_frame_tf",
+            arguments=[
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                f"{frame_prefix_val}lidar_link",
+                f"{robot_name_val}/{frame_prefix_val}base_footprint/front_lidar",
+            ],
+            output="screen",
+        )
+
         return [
             robot_state_publisher,
             joint_state_publisher,
             spawn_robot,
             parameter_bridge,
             pointcloud_to_scan,
+            lidar_sensor_frame_tf,
         ]
 
     # Gazebo Sim

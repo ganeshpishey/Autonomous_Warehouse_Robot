@@ -202,14 +202,6 @@
           </material>
         </visual>
 
-        <collision name="collision">
-          <geometry>
-            <mesh>
-              <uri>../meshes/environment/env.stl</uri>
-              <scale>0.00005 0.00005 0.00005</scale>
-            </mesh>
-          </geometry>
-        </collision>
       </link>
     </model>
 
@@ -319,6 +311,112 @@
       </link>
     </model>
 
+    <model name="door_rack_obstacles">
+      <static>true</static>
+
+      <link name="left_door_rack">
+        <pose>-5.45 1.55 0 0 0 0</pose>
+        <collision name="rack_body_collision">
+          <pose>0 0 0.75 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.1 0.45 1.5</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="rack_body">
+          <pose>0 0 0.75 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.1 0.45 1.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.72 0.72 0.74 1</ambient>
+            <diffuse>0.86 0.86 0.88 1</diffuse>
+            <specular>0.04 0.04 0.04 1</specular>
+          </material>
+        </visual>
+        <visual name="top_shelf">
+          <pose>0 0 1.2 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.16 0.5 0.05</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.78 0.78 0.8 1</ambient>
+            <diffuse>0.92 0.92 0.94 1</diffuse>
+            <specular>0.04 0.04 0.04 1</specular>
+          </material>
+        </visual>
+        <visual name="mid_shelf">
+          <pose>0 0 0.75 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.16 0.5 0.05</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.78 0.78 0.8 1</ambient>
+            <diffuse>0.92 0.92 0.94 1</diffuse>
+            <specular>0.04 0.04 0.04 1</specular>
+          </material>
+        </visual>
+      </link>
+
+      <link name="right_door_rack">
+        <pose>6.9 1.55 0 0 0 0</pose>
+        <collision name="rack_body_collision">
+          <pose>0 0 0.75 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.1 0.45 1.5</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="rack_body">
+          <pose>0 0 0.75 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.1 0.45 1.5</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.72 0.72 0.74 1</ambient>
+            <diffuse>0.86 0.86 0.88 1</diffuse>
+            <specular>0.04 0.04 0.04 1</specular>
+          </material>
+        </visual>
+        <visual name="top_shelf">
+          <pose>0 0 1.2 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.16 0.5 0.05</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.78 0.78 0.8 1</ambient>
+            <diffuse>0.92 0.92 0.94 1</diffuse>
+            <specular>0.04 0.04 0.04 1</specular>
+          </material>
+        </visual>
+        <visual name="mid_shelf">
+          <pose>0 0 0.75 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1.16 0.5 0.05</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.78 0.78 0.8 1</ambient>
+            <diffuse>0.92 0.92 0.94 1</diffuse>
+            <specular>0.04 0.04 0.04 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
     <model name="warehouse_zone_marking">
       <static>true</static>
       <link name="marking_link">
@@ -377,6 +475,15 @@
             <specular>0.02 0.02 0.02 1</specular>
           </material>
         </visual>
+
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>../meshes/environment/env.stl</uri>
+              <scale>0.00005 0.00005 0.00005</scale>
+            </mesh>
+          </geometry>
+        </collision>
       </link>
     </model>
 
