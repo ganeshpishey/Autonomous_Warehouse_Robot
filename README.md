@@ -1,0 +1,119 @@
+# Donar Single-Robot Final Project Workflow
+
+This package already has the pieces you need for the single-robot project flow:
+
+- saved-map localization with `nav2_map_server` + `AMCL`
+- predefined multi-goal navigation through `mission_planner.py`
+- an RViz goal-capture helper
+
+For the single-robot demo path, use the saved map and AMCL for localization. That is the clean production-style flow for this workspace after map creation. You only need `slam_toolbox` during the mapping stage.
+
+## 1. Build And Source
+
+```bash
+cd /home/ganesh/robot_ws
+colcon build --packages-select donar_robot_description
+source /opt/ros/humble/setup.bash
+source /home/ganesh/robot_ws/install/setup.bash
+```
+
+## 2. Save The Map Once
+
+If you are still creating the map live, save it with:
+
+```bash
+ros2 run nav2_map_server map_saver_cli -f /home/ganesh/robot_ws/warehouse_map
+```
+
+This workspace already contains:
+
+- `/home/ganesh/robot_ws/warehouse_map.yaml`
+- `/home/ganesh/robot_ws/warehouse_map.pgm`
+
+## 3. Localize On The Saved Map
+
+Use the single-robot Nav2 launch to run Gazebo, load the saved map, start AMCL, and publish the initial pose:
+
+```bash
+ros2 launch donar_robot_description single_robot_nav2.launch.py \
+  map:=/home/ganesh/robot_ws/warehouse_map.yaml \
+  use_rviz:=true
+```
+
+Notes:
+
+- `single_robot_nav2.launch.py` already uses `nav2_bringup` with `slam:=False`, so it loads the saved map instead of remapping every run.
+- The default spawn and initial pose are both `x=-1.0`, `y=-3.0`, `yaw=0.0`.
+
+## 4. Capture A Predefined Route
+
+Use RViz `2D Goal Pose` clicks to create your shelf route file:
+
+```bash
+ros2 run donar_robot_description capture_goal_poses.py --ros-args \
+  -p output_file:=/home/ganesh/robot_ws/src/donar_robot_description/config/warehouse_route.json
+```
+
+Then in RViz:
+
+1. Click `2D Goal Pose` for each shelf or drop-off point in order.
+2. Stop the node when the route is complete.
+3. Reuse that JSON file for repeated demos.
+
+The package also includes an example route file:
+
+- [/home/ganesh/robot_ws/src/donar_robot_description/config/final_demo_goals.json](/home/ganesh/robot_ws/src/donar_robot_description/config/final_demo_goals.json)
+
+To run the built-in predefined goal points directly:
+
+```bash
+ros2 launch donar_robot_description predefined_multi_goal.launch.py \
+  map:=/home/ganesh/robot_ws/warehouse_map.yaml \
+  goals_file:=/home/ganesh/robot_ws/src/donar_robot_description/config/final_demo_goals.json \
+  use_rviz:=true
+```
+
+## 5. Run Predefined Multi-Goal Navigation
+
+For the route only:
+
+```bash
+ros2 launch donar_robot_description predefined_multi_goal.launch.py \
+  map:=/home/ganesh/robot_ws/warehouse_map.yaml \
+  goals_file:=/home/ganesh/robot_ws/src/donar_robot_description/config/warehouse_route.json \
+  use_rviz:=true
+```
+
+Notes:
+
+- By default this launch expects you to localize manually in RViz with `2D Pose Estimate`, which avoids the launch republishing an old initial pose over your manual estimate.
+- If you want the launch to seed AMCL from the configured spawn pose instead, add `publish_initial_pose:=true`.
+- The predefined mission now follows the goal order exactly as stored in the JSON file by default.
+- The default route skips the first stored goal, so the robot starts from goal 2. Override with `skip_goal_count:=0` if you want the full route back.
+- Waypoint yaw is aligned to the next path segment by default, and transit waypoints always use path-aligned yaw so they do not trigger extra turning from placeholder `yaw: 0.0` values.
+- If you want the old reordering behavior for experiments, add `start_from_nearest_goal:=true optimize_route_order:=true`.
+
+Useful monitoring commands:
+
+```bash
+ros2 topic echo /mission_status
+ros2 topic echo /amcl_pose --once
+ros2 topic list | grep mission
+```
+
+`mission_planner.py` is the Step 4 custom node. It already:
+
+- loads a queue of goal poses from JSON
+- sends them to Nav2 one by one
+- retries failed goals
+- publishes status on `/mission_status`
+- publishes RViz markers on `/mission_goals`
+
+## 6. What To Record For Evaluation
+
+- screenshot of RViz map versus the Gazebo warehouse world
+- screen recording of one full multi-goal run
+- notes on how many goals succeeded on the first try
+- any `RETRYING` states from `/mission_status`
+
+
