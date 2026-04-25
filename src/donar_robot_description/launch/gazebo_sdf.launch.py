@@ -173,11 +173,11 @@ def generate_launch_description():
                     "queue_size": 10,
                     # Keep the conversion in the incoming cloud frame because
                     # Gazebo publishes a sensor frame that is not part of the
-                    # ROS TF tree. Trim the slice so we keep obstacle surfaces
-                    # around the lidar plane without projecting the robot's own
-                    # roof and chassis into the synthetic 2D scan.
-                    "min_height": -0.02,
-                    "max_height": 0.35,
+                    # ROS TF tree. Keep a taller slice so the synthetic 2D
+                    # scan captures the rack panels as well as the support
+                    # posts, while still avoiding most roof-only returns.
+                    "min_height": -0.45,
+                    "max_height": 0.45,
                     "angle_min": -3.14159,
                     "angle_max": 3.14159,
                     "angle_increment": 0.00872665,

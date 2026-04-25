@@ -67,12 +67,12 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "spawn_x",
-                default_value="-1.0",
+                default_value="-9.6",
                 description="Robot spawn X position in Gazebo.",
             ),
             DeclareLaunchArgument(
                 "spawn_y",
-                default_value="-3.0",
+                default_value="-4.9",
                 description="Robot spawn Y position in Gazebo.",
             ),
             DeclareLaunchArgument(
@@ -97,12 +97,12 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument(
                 "initial_pose_x",
-                default_value="-1.0",
+                default_value="-9.6",
                 description="Initial pose X in the map frame. Defaults to the Gazebo spawn pose.",
             ),
             DeclareLaunchArgument(
                 "initial_pose_y",
-                default_value="-3.0",
+                default_value="-4.9",
                 description="Initial pose Y in the map frame. Defaults to the Gazebo spawn pose.",
             ),
             DeclareLaunchArgument(
@@ -132,6 +132,36 @@ def generate_launch_description():
                 default_value="true",
                 description="Publish the configured AMCL initial pose automatically.",
             ),
+            DeclareLaunchArgument(
+                "enable_dynamic_obstacle",
+                default_value="true",
+                description="Spawn and animate the dynamic obstacle in the Gazebo environment.",
+            ),
+            DeclareLaunchArgument(
+                "obstacle_start_delay",
+                default_value="30.0",
+                description="Seconds to wait before the dynamic obstacle begins moving.",
+            ),
+            DeclareLaunchArgument(
+                "obstacle_start_x",
+                default_value="-1.5",
+                description="Dynamic obstacle start X position in the world frame.",
+            ),
+            DeclareLaunchArgument(
+                "obstacle_start_y",
+                default_value="-0.5",
+                description="Dynamic obstacle start Y position in the world frame.",
+            ),
+            DeclareLaunchArgument(
+                "obstacle_end_x",
+                default_value="2.5",
+                description="Dynamic obstacle end X position in the world frame.",
+            ),
+            DeclareLaunchArgument(
+                "obstacle_end_y",
+                default_value="-0.5",
+                description="Dynamic obstacle end Y position in the world frame.",
+            ),
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(gazebo_launch),
                 condition=IfCondition(LaunchConfiguration("launch_sim")),
@@ -145,6 +175,24 @@ def generate_launch_description():
                     "launch_gazebo": "true",
                     "bridge_global_topics": "true",
                 }.items(),
+            ),
+            Node(
+                package="donar_robot_description",
+                executable="dynamic_obstacle_controller.py",
+                name="single_robot_dynamic_obstacle",
+                condition=IfCondition(LaunchConfiguration("enable_dynamic_obstacle")),
+                output="screen",
+                parameters=[
+                    {
+                        "use_sim_time": True,
+                        "world_name": "warehouse_world",
+                        "start_delay_sec": LaunchConfiguration("obstacle_start_delay"),
+                        "start_x": LaunchConfiguration("obstacle_start_x"),
+                        "start_y": LaunchConfiguration("obstacle_start_y"),
+                        "end_x": LaunchConfiguration("obstacle_end_x"),
+                        "end_y": LaunchConfiguration("obstacle_end_y"),
+                    }
+                ],
             ),
             TimerAction(
                 period=LaunchConfiguration("nav2_start_delay"),
@@ -193,7 +241,9 @@ def generate_launch_description():
                                         "x": LaunchConfiguration("initial_pose_x"),
                                         "y": LaunchConfiguration("initial_pose_y"),
                                         "yaw": LaunchConfiguration("initial_pose_yaw"),
-                                        "publish_count": 15,
+                                        # Seed AMCL reliably without continuing to override
+                                        # a manual 2D Pose Estimate in RViz for too long.
+                                        "publish_count": 3,
                                         "startup_delay_sec": 5.0,
                                     }
                                 ],

@@ -54,7 +54,7 @@ Visualization Manager:
       Size (Pixels): 6
       Use Fixed Frame: true
     - Class: rviz_default_plugins/PointCloud2
-      Enabled: false
+      Enabled: true
       Name: LidarPoints
       Topic:
         Value: /donar_robot/lidar/points

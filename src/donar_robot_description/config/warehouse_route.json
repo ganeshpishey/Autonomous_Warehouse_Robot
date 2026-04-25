@@ -7,6 +7,13 @@
       "yaw": 0.0
     },
     {
+      "name": "goal_1_to_2_door_transit",
+      "x": 2.8,
+      "y": -18.9,
+      "yaw": 0.0,
+      "transit": true
+    },
+    {
       "name": "goal_2",
       "x": 5.43,
       "y": -18.06,
@@ -76,6 +83,13 @@
       "name": "goal_6_to_7_transit_2",
       "x": 6.500,
       "y": -4.400,
+      "yaw": 0.0,
+      "transit": true
+    },
+    {
+      "name": "goal_6_to_7_door_transit",
+      "x": 2.600,
+      "y": -2.400,
       "yaw": 0.0,
       "transit": true
     },
