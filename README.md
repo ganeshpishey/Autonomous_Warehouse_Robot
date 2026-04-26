@@ -1,4 +1,4 @@
-# Donar Single-Robot Final Project Workflow
+# Single-Robot Final Project Workflow
 
 This package already has the pieces you need for the single-robot project flow:
 
